@@ -1,8 +1,38 @@
+// {
+//   "extends": "@react-native/typescript-config",
+//   "compilerOptions": {
+//     "moduleResolution": "node16",
+//     "types": [
+//       "jest"
+//     ]
+//   },
+//   "include": [
+//     "**/*.ts",
+//     "**/*.tsx",
+//     "nativewind-env.d.ts"
+//   ],
+//   "exclude": [
+//     "**/node_modules",
+//     "**/Pods"
+//   ]
+// }
+
+
 {
   "extends": "@react-native/typescript-config",
   "compilerOptions": {
-    "types": ["jest"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react-native",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["**/node_modules", "**/Pods"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": ["node_modules", "Pods"]
 }
