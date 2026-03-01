@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import MainTabNavigator from './MainTabNavigator';
+import CategoryScreen from '../../screens/CategoryScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -10,6 +11,7 @@ function MainNavigator() {
   return (
 <Stack.Navigator screenOptions={{ headerShown: false }}>
   <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+  <Stack.Screen name='Category' component={CategoryScreen}/>
 </Stack.Navigator>
   )
 }
