@@ -1,10 +1,19 @@
-import { FlatList, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCategories } from '../api/apiClient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from '@react-native-vector-icons/ionicons' 
+import Ionicons from '@react-native-vector-icons/ionicons';
 import ProductCard from '../components/ProductCard';
 
 type Route = RouteProp<{ params: { categoryName?: string } }, 'params'>;
@@ -24,48 +33,83 @@ const CategoryScreen = () => {
     queryFn: fetchCategories, // ❗ function call nahi karna
   });
 
-  const [selectedCategoryName,setSelectedCategoryName] = useState(initialCategoryName || categories?.[0]?.name)
+  const [selectedCategoryName, setSelectedCategoryName] = useState(
+    initialCategoryName || categories?.[0]?.name,
+  );
 
-  const [modalVisible,setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const selectedCategory = categories?.find((c:any)=> c.name === selectedCategoryName);
+  const selectedCategory = categories?.find(
+    (c: any) => c.name === selectedCategoryName,
+  );
   const products = selectedCategory?.products || [];
   return (
-    <SafeAreaView className='flex-1 bg-gray-100'>
-      <StatusBar barStyle={"dark-content"} backgroundColor="#e7e6e6"/>
-       
-       <View className='px-4 pt-1 pb-2 bg-white'>
-        <View className='flex-row items-center justify-between'>
-          <View className='flex-row items-center justify-between'>
-            <Pressable className='p-2'  onPress={()=> navigation.goBack()}>
-              <Ionicons name='arrow-back' size={22} color="#000"/>
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <StatusBar barStyle={'dark-content'} backgroundColor="#e7e6e6" />
+
+      <View className="px-4 pt-1 pb-2 bg-white">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center justify-between">
+            <Pressable className="p-2" onPress={() => navigation.goBack()}>
+              <Ionicons name="arrow-back" size={22} color="#000" />
             </Pressable>
 
-            <Pressable className='flex-row items-center gap-2'>
+            <Pressable
+              onPress={() => setModalVisible(true)}
+              className="flex-row items-center gap-2"
+            >
               <Text>{selectedCategoryName}</Text>
-              <Ionicons name='chevron-down-outline' size={18} color="#000"/>
+              <Ionicons name="chevron-down-outline" size={18} color="#000" />
             </Pressable>
           </View>
 
-           <Pressable>
-              <Ionicons name='search-outline' size={22} color="#000"/>
-            </Pressable>
-
+          <Pressable>
+            <Ionicons name="search-outline" size={22} color="#000" />
+          </Pressable>
         </View>
-       </View>
+      </View>
 
-       <View className='flex-1 px-1 mt-4'>
-         <FlatList
-           data={products}
-           keyExtractor={(i)=> i.id}
-           numColumns={2}
-           columnWrapperStyle={{justifyContent:"space-between"}}
-           showsVerticalScrollIndicator={false}
-           renderItem={({item}) => <ProductCard item={item}/> }
+      <View className="flex-1 px-1 mt-4">
+        <FlatList
+          data={products}
+          keyExtractor={i => i.id}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: 'space-between' }}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <ProductCard item={item} />}
           //  contentContainerStyle={{paddingBottom:totalItems > 0 ? 80 : 0}}
-           ListEmptyComponent={<Text className='text-gray-500 text-center'>No products in this Category</Text>}
-         />
-       </View>
+          ListEmptyComponent={
+            <Text className="text-gray-500 text-center">
+              No products in this Category
+            </Text>
+          }
+        />
+      </View>
+
+      <Modal visible={modalVisible} transparent animationType="slide">
+        <View className="flex-1 bg-black/40 justify-center p-6">
+          <View className="bg-white rounded-2xl max-h-[70%] p-4">
+            <Text className="text-lg font-bold mb-3">Categories</Text>
+            <ScrollView>
+              {categories?.map((cat: any) => (
+                <Pressable className='py-2' onPress={()=> {
+                  setSelectedCategoryName(cat.name);
+                  setModalVisible(false)
+                }} key={cat.id}>
+                  <Text
+                    className={`text-base ${selectedCategoryName == cat.name ? 'font-bold' : 'font-normal'}`}
+                  >
+                    {cat?.name}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+            <Pressable onPress={()=> setModalVisible(false)}>
+               <Text className='text-red-500 font-semibold text-center'>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
