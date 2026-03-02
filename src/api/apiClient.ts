@@ -59,7 +59,7 @@ export interface Category {
   products: Product[];
 }
 
-const API_BASE_URL = "http://192.168.1.45:3001/api/v1";
+const API_BASE_URL = "http://192.168.1.33:3001/api/v1";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
