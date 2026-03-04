@@ -15,6 +15,7 @@ import { fetchCategories } from '../api/apiClient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import ProductCard from '../components/ProductCard';
+import CartBottomBar from '../components/CartBottomBar';
 
 type Route = RouteProp<{ params: { categoryName?: string } }, 'params'>;
 
@@ -85,6 +86,8 @@ const CategoryScreen = () => {
           }
         />
       </View>
+
+      <CartBottomBar/>
 
       <Modal visible={modalVisible} transparent animationType="slide">
         <View className="flex-1 bg-black/40 justify-center p-6">

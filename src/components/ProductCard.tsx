@@ -10,6 +10,7 @@ import {
 import React, { memo, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { AnimatedHeaderHeightContext } from '@react-navigation/native-stack/lib/typescript/src/utils/useAnimatedHeaderHeight';
+import { CartItem, useCartStore } from '../store/useCartStore';
 
 const screenW = Dimensions.get('window').width;
 const GAP = 16;
@@ -55,6 +56,19 @@ const ProductCard = memo(({ item }: Props) => {
       useNativeDriver: true,
       friction: 6,
     }).start();
+
+  const quantity =
+    useCartStore(
+      s => s.items.find((ci: CartItem) => ci.id == item?.id)?.quantity,
+    ) || 0;
+
+  const addItem = useCartStore((s) => s.addItem);
+  const updateQuantity = useCartStore((s)=> s.updateQuantity)
+
+  const handleAdd = () => addItem(item);
+  const handleIncrement = () => updateQuantity(item.id, 1);
+  const handleDecrement = () => updateQuantity(item.id, -1);
+
   return (
     <Animated.View
       style={{ transform: [{ scale }], width: PRODUCT_CARD_WIDTH }}
@@ -65,7 +79,7 @@ const ProductCard = memo(({ item }: Props) => {
         onPressOut={onPressOut}
         // onPressIn={() => animateTo(0.98)}
         // onPressOut={() => animateTo(1)}
-        onPress={() => {}}
+        onPress={() => { }}
       >
         <View className="h-36  bg-gray-100 dark:bg-zinc-900 relative rounded-xl overflow-hidden">
           <Image
@@ -84,7 +98,7 @@ const ProductCard = memo(({ item }: Props) => {
           </View>
 
           <Pressable
-            onPress={() => {}}
+            onPress={() => { }}
             hitSlop={10}
             className="absolute right-2 top-2 px-2 rounded-full border border-gray-200 bg-white"
           >
@@ -114,6 +128,22 @@ const ProductCard = memo(({ item }: Props) => {
                 </Text>
               ) : null}
             </View>
+
+            {quantity > 0 ? (
+              <View className='w-[96px] h-[34px] px-2 py-1.5 rounded-full border border-emerald-100 flex-row items-center justify-center'>
+                <Pressable onPress={handleDecrement} hitSlop={8} className='min-w-[28px] items-center'>
+                  <Text className='text-[18px] font-black text-emerald-600 dark:text-emerald-400'>-</Text>
+                </Pressable>
+                <Text className='text-[13px] font-extrabold text-emerald-600 dark:text-emerald-400'>{quantity}</Text>
+                <Pressable onPress={handleIncrement} hitSlop={8} className='min-w-[28px]'>
+                  <Text className='text-[18px] font-black text-emerald-600 dark:text-emerald-400'>+</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable onPress={handleAdd} className='w-[96px] h-[34px] px-2 py-1.5 rounded-full border border-emerald-100 items-center justify-center'>
+                <Text className='text-[12px] font-extrabold tracking-[0.5px] text-emerald-600 '>ADD</Text>
+              </Pressable>
+            )}
           </View>
         </View>
       </Pressable>
