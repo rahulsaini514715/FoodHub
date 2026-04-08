@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 
 function RootNavigator() {
-  const isAuthentication = true;
+  const isAuthentication = false;
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {
