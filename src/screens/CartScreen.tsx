@@ -145,7 +145,7 @@ import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from '
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { MainStackParamList } from '../navigation/Routes'
+import { MainRoutes, MainStackParamList } from '../navigation/Routes'
 import { CartItem, useCartStore } from '../store/useCartStore'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@react-native-vector-icons/ionicons'
@@ -327,7 +327,7 @@ const CartScreen = () => {
       {totalItems > 0 && (
         <View className='absolute bottom-6 left-4 right-4 bg-green-600 flex-row justify-between items-center px-4 py-3 rounded-xl shadow-lg'>
           <Text className='text-white text-base font-semibold'>{totalItems} items | {totalPrice}</Text>
-          <Pressable className='bg-white px-4 py-2  rounded-lg'>
+          <Pressable onPress={()=> navigation.navigate( MainRoutes.Checkout)} className='bg-white px-4 py-2  rounded-lg'>
             <Text>Proceed to Checkout</Text>
           </Pressable>
         </View>
