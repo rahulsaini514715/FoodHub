@@ -156,6 +156,11 @@ const CartScreen = () => {
   const updateQunatity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const addItem = useCartStore((s) => s.addItem);
+  
+  const totalItems = items?.reduce((sum,it) => sum + (it.quantity || 0),0);
+
+  const totalPrice = items?.reduce((sum,it) => sum + (it.price * (it.quantity || 0)),0);
+
 
   const exclusiveDeals = [
     {
@@ -318,6 +323,15 @@ const CartScreen = () => {
           </View>
         }
       />
+
+      {totalItems > 0 && (
+        <View className='absolute bottom-6 left-4 right-4 bg-green-600 flex-row justify-between items-center px-4 py-3 rounded-xl shadow-lg'>
+          <Text className='text-white text-base font-semibold'>{totalItems} items | {totalPrice}</Text>
+          <Pressable className='bg-white px-4 py-2  rounded-lg'>
+            <Text>Proceed to Checkout</Text>
+          </Pressable>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
